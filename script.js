@@ -5,10 +5,10 @@ $(document).ready(function() {
     setCurrentTime();
   }, interval);
 
-  var username = getCookie("username");
+  var username = localStorage.getItem("username"); //getCookie("username");
   if (username) {
     $(".user-name").css("display", "none");
-    var interest = getCookie("interest");
+    var interest = localStorage.getItem("interest"); //getCookie("interest");
     // If Interest is already present in cookies
     if (interest) {
       // Hide Interest input
@@ -18,12 +18,12 @@ $(document).ready(function() {
       // Show User name
       $(".greeting").html(`Hi, <span class="stored-name">${username}</span>`);
       // Fetch picture from cookies
-      var pictureUrlListJson = getCookie("pictureUrlList");
+      var pictureUrlListJson = localStorage.getItem("pictureUrlList"); //getCookie("pictureUrlList");
       console.log("Cook ", pictureUrlListJson);
       // If no picture in cookies, fetch new picture
       if (!pictureUrlListJson) {
         newimage(interest);
-        var pictureUrlList = JSON.parse(getCookie("pictureUrlList"));
+        var pictureUrlList = JSON.parse(localStorage.getItem("pictureUrlList"));
         var randomIndex = Math.floor(Math.random() * 20) + 1;
         var picture_url = pictureUrlList[randomIndex];
       }
@@ -31,9 +31,9 @@ $(document).ready(function() {
       var randomIndex = Math.floor(Math.random() * 20) + 1;
       var picture_url = pictureUrlList[randomIndex];
       
-	  var pictureSourceList = JSON.parse(getCookie("pictureSourceList"));
-	  var photo_by_name = getCookie("photo-by-name");
-      var photo_by_url = getCookie("photo-by-url");
+	  var pictureSourceList = JSON.parse(localStorage.getItem("pictureSourceList"));
+	  var photo_by_name = localStorage.getItem("photo-by-name"); //getCookie("photo-by-name");
+      var photo_by_url = localStorage.getItem("photo-by-url"); //getCookie("photo-by-url");
 
       $(".photoby").html(pictureSourceList[randomIndex]);
       $(".photoby").attr("href", pictureSourceList[randomIndex]);
@@ -61,12 +61,12 @@ $(document).ready(function() {
       if (!value) return;
       $(".user-name").fadeOut(function() {
         $(".greeting").html(`Hi, ${value}`);
-        var interest = getCookie("interest");
+        var interest = localStorage.getItem("interest"); //getCookie("interest");
         if (!interest) {
           $(".interest").css("display", "inline-block");
         }
         $(".greeting").fadeIn(function() {
-          setCookie("username", value, 365);
+          localStorage.setItem("username", value); //setCookie("username", value, 365);
         });
       });
 	  $(".image").css("filter", "blur(0px)");
@@ -75,7 +75,7 @@ $(document).ready(function() {
 	if (e.which == 27) {
 	  $(".image").css("filter", "blur(0px)");
 	  $(".image").css("transform", "scale(1)");
-	  var username = getCookie("username");
+	  var username = localStorage.getItem("username"); //getCookie("username");
 	  $(".greeting").html(`Hi, ${username}`);
 	  $(".user-name").css("display", "none");
 	}
@@ -86,11 +86,11 @@ $(document).ready(function() {
       var interest = e.target.value;
       if (!interest) return;
       newimage(interest);
-      var username = getCookie("username");
+      var username = localStorage.getItem("username"); //getCookie("username");
       $(".interest").fadeOut(function() {
         $(".greeting").html(`Hi, ${username}`);
         $(".greeting").fadeIn(function() {
-          setCookie("interest", interest, 365);
+          localStorage.setItem("interest", interest); //setCookie("interest", interest, 365);
         });
       });
 	  $(".image").css("filter", "blur(0px)");
@@ -99,7 +99,7 @@ $(document).ready(function() {
 	if (e.which == 27) {
 	  $(".image").css("filter", "blur(0px)");
 	  $(".image").css("transform", "scale(1)");
-	  var username = getCookie("username");
+	  var username = localStorage.getItem("username"); //getCookie("username");
 	  $(".greeting").html(`Hi, ${username}`);
 	  $(".interest").css("display", "none");
 	}
@@ -127,7 +127,7 @@ $(document).ready(function() {
   // Fetch next 20 images
   $(".refresh-images").click(function() {
 	let interest = $(".interest-text").html();
-	let interestRefreshCount = getCookie("interest-refresh-count");
+	let interestRefreshCount = localStorage.getItem("interest-refresh-count"); //getCookie("interest-refresh-count");
 	interestRefreshCount++;
     newimage(interest, interestRefreshCount);
   });
@@ -158,11 +158,11 @@ const ACCESS_KEY =
 
 var i = 1;
 function updatePictureTimer() {
-  var pictureList = JSON.parse(getCookie("pictureUrlList"));
-  console.log('A ',pictureList);
+  var pictureList = JSON.parse(localStorage.getItem("pictureUrlList"));
+  //console.log('A ',pictureList);
   $(".image").css("background-image", `url(${pictureList[i]})`);
   
-  var pictureSourceList = JSON.parse(getCookie("pictureSourceList"));
+  var pictureSourceList = JSON.parse(localStorage.getItem("pictureSourceList"));
   $(".photoby").html(pictureSourceList[i]);
   $(".photoby").attr("href", pictureSourceList[i]);
   i++;
@@ -194,12 +194,12 @@ function newimage(keyword, pageNo=1) {
     var picture_url = picture.urls.regular;
     var photo_by_name = picture.user.name;
     var photo_by_url = picture.links.html;
-    setCookie("picture", picture_url, 0.5);
-    setCookie("pictureUrlList", JSON.stringify(pictureUrlList), 0.5);
-    setCookie("pictureSourceList", JSON.stringify(pictureSourceList), 0.5);
-    setCookie("photo-by-name", photo_by_name, 0.5);
-    setCookie("photo-by-url", photo_by_url, 0.5);
-	setCookie("interest-refresh-count", pageNo, 0.5);
+    localStorage.setItem("picture", picture_url);//setCookie("picture", picture_url, 0.5);
+    localStorage.setItem("pictureUrlList", JSON.stringify(pictureUrlList));//setCookie("pictureUrlList", JSON.stringify(pictureUrlList), 0.5);
+    localStorage.setItem("pictureSourceList", JSON.stringify(pictureSourceList));//setCookie("pictureSourceList", JSON.stringify(pictureSourceList), 0.5);
+    localStorage.setItem("photo-by-name", photo_by_name);//setCookie("photo-by-name", photo_by_name, 0.5);
+    localStorage.setItem("photo-by-url", photo_by_url);//setCookie("photo-by-url", photo_by_url, 0.5);
+	localStorage.setItem("interest-refresh-count", pageNo);//setCookie("interest-refresh-count", pageNo, 0.5);
     $(".interest-text").html(keyword);
     $(".photoby").html(photo_by_url);
     $(".photoby").attr("href", photo_by_url);
